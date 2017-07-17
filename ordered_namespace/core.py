@@ -1,13 +1,8 @@
 from collections import OrderedDict
 import re
 
-try:
-    import IPython
-except ImportError:
-    IPython = None
 
-
-class OrderedNamespace:
+class Struct:
 
     # Regular expression pattern for valid Python attributes
     # https://docs.python.org/3/reference/lexical_analysis.html#identifiers
@@ -93,6 +88,9 @@ class OrderedNamespace:
     def __delitem__(self, key):
         del self._odict[key]
 
+    def __delattr__(self, key):
+        del self._odict[key]
+
     def __iter__(self):
         return self._odict.__iter__()
 
@@ -110,33 +108,48 @@ class OrderedNamespace:
     def __eq__(self, other):
         return self._odict.__eq__(other)
 
+    def __ne__(self, other):
+        return self._odict.__ne__(other)
+
     def __repr__(self):
-        return dict(self._odict).__repr__()
+        return self._odict.__repr__()
 
-#         items = ("{}={}".format(k, v) for k, v in self._odict.items())
-#         return "{}({})".format(type(self).__name__, ", ".join(items))
+    # def _ipython_key_completions_(self):
+    #     """http://ipython.readthedocs.io/en/stable/config/integrating.html#tab-completion
+    #     """
+    #     print('sdfdsfdf')
+    #     return self.__dir__()
 
-    # IPython/Jupyter rich display
-    def _ipython_key_completions_(self):
-        """http://ipython.readthedocs.io/en/stable/config/integrating.html#tab-completion
+    def _repr_pretty_(self, p, cycle):
+        """Derived from IPython's dict and sequence pretty printer functions,
+        https://github.com/ipython/ipython/blob/master/IPython/lib/pretty.py
         """
-        return self.__dir__()
+        if cycle:
+            p.text('{...}')
+        else:
+            keys = self.keys()
 
-#     _formatter_plain = ip.display_formatter.formatters['text/plain']
-#     def _repr_pretty_(self, p, cycle):
-#         """http://ipython.readthedocs.io/en/stable/api/generated/IPython.lib.pretty.html
-#         """
-#         _plain_repr_pretty = self._formatter_plain.lookup_by_type(dict)
+            if keys:
+                delim_start = '{'
+                delim_end = '}'
 
-#         _plain_repr_pretty(dict(self), p, cycle)
+                wid_max_max = 10
+                wid_max = max([len(k) for k in keys])
+                wid_max = min([wid_max, wid_max_max])
+                key_template = '{{:{:d}s}}: '.format(wid_max)
+
+                with p.group(len(delim_start), delim_start, delim_end):
+                    # Loop over item keys
+                    for idx, key in p._enumerate(keys):
+                        if idx:
+                            p.text(',')
+                            p.breakable()
+
+                        p.text(key_template.format(key))
+                        p.pretty(self[key])
+            else:
+                p.text('{}')
 
 
-    def _ipython_display_(self):
-        print('dsf')
-#         text = json.dumps(self._odict, indent=2)
-#         text = repr(self._odict)
-#         data = {'text/plain': text}
-#         IPython.display.display(ata, raw=True)
-        if IPython:
-            IPython.display.display(dict(self._odict))
-        # IPython.display.display(self._odict)
+if __name__ == '__main__':
+    pass
