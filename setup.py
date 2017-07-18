@@ -1,7 +1,7 @@
 
 from setuptools import setup, find_packages
 
-version = '2017.7.15'
+version = '2017.7.17'
 
 setup(
     name='ordered_namespace',

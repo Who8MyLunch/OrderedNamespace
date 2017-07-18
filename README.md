@@ -21,6 +21,70 @@ the class' built-in `__dict__`.  This meant writing my own methods for `__setite
 as used in Jupyter/IPython.  Overall it was more work than I originally anticipated, but it was all
 fun and I'm glade I did it.
 
+This package is easy to use:
+
+```ipynb
+In [1]: import ordered_namespace as ons
+   ...: import numpy as np
+   ...:
+   ...:
+   ...: data = ons.Struct()
+   ...:
+   ...: data.X = [1, 2, 3]
+   ...:
+   ...: data['Y'] = {'hello': 'I am not a robot',
+   ...:              'yikes': 75.4}
+   ...:
+   ...: data.Z = np.arange(35).reshape(7,5)
+   ...:
+
+In [2]: data
+Out[2]:
+{X: [1, 2, 3],
+ Y: {hello: 'I am not a robot', yikes: 75.4},
+ Z: array([[ 0,  1,  2,  3,  4],
+        [ 5,  6,  7,  8,  9],
+        [10, 11, 12, 13, 14],
+        [15, 16, 17, 18, 19],
+        [20, 21, 22, 23, 24],
+        [25, 26, 27, 28, 29],
+        [30, 31, 32, 33, 34]])}
+
+In [3]:
+```
+
+
+```py
+
+import ordered_namespace as ons
+import numpy as np
+
+
+data = ons.Struct()
+
+data.X = [1, 2, 3]
+
+data['Y'] = {'hello': 'I am not a robot',
+             'yikes': 75.4}
+
+data.Z = np.arange(35).reshape(7,5)
+```
+
+```py
+>>>data
+
+{X: [1, 2, 3],
+ Y: {hello: 'I am not a robot', yikes: 75.4},
+ Z: array([[ 0,  1,  2,  3,  4],
+        [ 5,  6,  7,  8,  9],
+        [10, 11, 12, 13, 14],
+        [15, 16, 17, 18, 19],
+        [20, 21, 22, 23, 24],
+        [25, 26, 27, 28, 29],
+        [30, 31, 32, 33, 34]])}
+
+```
+
 
 Inspiration for this class came from parts of the following projects:
 - https://docs.python.org/3.6/library/types.html#types.SimpleNamespace
