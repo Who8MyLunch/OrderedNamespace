@@ -2,12 +2,9 @@
 
 Namespaces are a great idea and this one is mine.
 
-What's the big deal?  Python dicts are just fine, but in the Jupyter/IPython interactive
-environment I hate having to deal with brackets and quotes when using tab-based auto-completion to
-get a quick glance at the contents of an object.
+What's the big deal?  Python dicts are just fine, but in the Jupyter/IPython interactive environment I hate having to deal with brackets and quotes when using tab-based auto-completion to get a quick glance at the contents of an object.
 
-OrderedNamespace has been especially designed to have a minimal number of things that bug me.  More
-specifically, I wanted my namespace implementation to support the following functionality:
+OrderedNamespace has been especially designed to have a minimal number of things that bug me.  More specifically, I wanted my namespace implementation to support the following functionality:
 
 - Access data contents as dot-style attributes _or_ as dict keys
 - Predictable ordering of attributes/keys
@@ -15,16 +12,17 @@ specifically, I wanted my namespace implementation to support the following func
 - Nesting: auto-convert supplied dict data to OrderedNamespace instances
 - Nice pretty printing within Jupyter environment
 
-Ultimately I decided to write a class from scratch and using an OrderedDict instance in place of
-the class' built-in `__dict__`.  This meant writing my own methods for `__setitem__`,
-`__getitem__`, `__getattr__` and `__setattr__`.  I also had to learn about automatic tab completion
-as used in Jupyter/IPython.  Overall it was more work than I originally anticipated, but it was all
-fun and I'm glade I did it.
+Ultimately I decided to write a class from scratch and using an OrderedDict instance in place of the class' built-in `__dict__`.  This meant writing my own methods for `__setitem__`, `__getitem__`, `__getattr__` and `__setattr__`.  I also had to learn about automatic tab completion as used in Jupyter/IPython.  Overall it was more work than I originally anticipated, but it was all fun and I'm glade I did it.
 
-This package is easy to use:
+Install this package with:
+
+```bash
+pip install ordered-nanmespace
+```
+
+And then use it like this:
 
 ```py
-
 import ordered_namespace as ons
 import numpy as np
 

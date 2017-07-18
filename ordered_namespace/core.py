@@ -130,8 +130,8 @@ class Struct:
             keys = self.keys()
 
             if keys:
-                delim_start = '{'
-                delim_end = '}'
+                delim_start = '[{'
+                delim_end = '}]'
 
                 wid_max_max = 10
                 wid_max = max([len(k) for k in keys])
