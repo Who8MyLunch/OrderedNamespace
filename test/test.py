@@ -39,7 +39,6 @@ Kinds of tests:
 
 #------------------------------------------------
 
-
 class TestBasic(unittest.TestCase):
     # def setUp(self):
     #     pass
@@ -91,6 +90,14 @@ class TestBasic(unittest.TestCase):
         keys_test_2 = list(info_2.keys())
 
         self.assertTrue(keys_test_1 == keys_test_2[::-1])
+
+    def test_nested_dict_converted(self):
+        info = ons.Struct()
+
+        item = {'a': [1, 2], 'X': 'hello'}
+        info.AA = item
+
+        self.assertTrue(type(info.AA) == ons.Struct)
 
 
 #------------------------------------------------

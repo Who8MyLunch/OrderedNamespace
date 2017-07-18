@@ -44,7 +44,7 @@ class Struct:
             return self._valid_key_pattern.match(key)
 
     #--------------------------------
-    # Expose standard dict methods
+    # Expose a few standard dict methods
     def items(self):
         return self._odict.items()
 
@@ -58,7 +58,7 @@ class Struct:
         return self._odict.pop(key)
 
     #--------------------------------
-    # Expose internal dict methods
+    # Expose essential dict internal methods
     def __setattr__(self, key, value):
         """Set an item with dot-style access while testing for invalid names
         """
@@ -75,7 +75,7 @@ class Struct:
             raise KeyError('Invalid attribute name: {}'.format(key))
 
         if isinstance(value, dict) and key not in self._special_names:
-            value = OrderedNamespace(value)
+            value = Struct(value)
 
         self._odict[key] = value
 
