@@ -9,6 +9,7 @@ class Struct:
     # _valid_key_pattern = re.compile('[a-zA-Z_][a-zA-Z0-9_]*')
     _valid_key_pattern = re.compile('[a-zA-Z][a-zA-Z0-9_]*')
     _special_names = ['_odict']
+    _repr_max_width = 13
 
 #     _odict = None
     def __init__(self, *args, **kwargs):
@@ -133,7 +134,7 @@ class Struct:
                 delim_start = '[{'
                 delim_end = '}]'
 
-                wid_max_max = 10
+                wid_max_max = self._repr_max_width
                 wid_max = max([len(k) for k in keys])
                 wid_max = min([wid_max, wid_max_max])
                 key_template = '{{:{:d}s}}: '.format(wid_max)
@@ -150,6 +151,7 @@ class Struct:
             else:
                 p.text('{}')
 
+#------------------------------------------------
 
 if __name__ == '__main__':
     pass
