@@ -3,6 +3,8 @@ import re
 
 
 class Struct:
+    """Ordered namespace class
+    """
 
     # Regular expression pattern for valid Python attributes
     # https://docs.python.org/3/reference/lexical_analysis.html#identifiers
@@ -11,18 +13,12 @@ class Struct:
     _special_names = ['_odict']
     _repr_max_width = 13
 
-#     _odict = None
     def __init__(self, *args, **kwargs):
-#         self._odict = OrderedDict()
+        """Ordered namespace class
+        """
         self.__dict__['_odict'] = OrderedDict()
 
         self.update(*args, **kwargs)
-
-#     @property
-#     def _odict(self):
-#         if not self._odict:
-#             self.__
-#         return self._odict
 
     def update(self, *args, **kwargs):
         d = {}
@@ -43,6 +39,17 @@ class Struct:
             return True
         else:
             return self._valid_key_pattern.match(key)
+
+    def asdict(self):
+        """Return a recursive dict representation of self
+        """
+        d = dict(self._odict)
+
+        for k,v in d.items():
+            if isinstance(v, Struct):
+                d[k] = v.asdict()
+
+        return d
 
     #--------------------------------
     # Expose a few standard dict methods

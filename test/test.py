@@ -94,10 +94,28 @@ class TestBasic(unittest.TestCase):
     def test_nested_dict_converted(self):
         info = ons.Struct()
 
-        item = {'a': [1, 2], 'X': 'hello'}
-        info.AA = item
+        nuts = {'a': [1, 2], 'X': 'hello'}
+        corn = {'b': [6, 9], 'Y': 'bye'}
+
+        info.AA = nuts
+        info.AA.BB = corn
 
         self.assertTrue(type(info.AA) == ons.Struct)
+        self.assertTrue(type(info.AA.BB) == ons.Struct)
+
+    def test_as_dict(self):
+        info = ons.Struct()
+
+        nuts = {'a': [1, 2], 'X': 'hello'}
+        corn = {'b': [6, 9], 'Y': 'bye'}
+
+        info.AA = nuts
+        info.AA.BB = corn
+
+        info = info.asdict()
+
+        self.assertTrue(type(info['AA']) == dict)
+        self.assertTrue(type(info['AA']['BB']) == dict)
 
 
 #------------------------------------------------
