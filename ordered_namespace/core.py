@@ -2,6 +2,28 @@ from collections import OrderedDict
 import re
 
 
+
+
+def convert_to_struct(value):
+    """Convert the following to Structs:
+       - dicts
+       - list elements that are dicts
+       - ???
+
+    This function is harmless to call on arbitrary variables.
+    """
+    if isinstance(value, dict):
+        # Convert dict to Struct
+        value = Struct(value)
+    elif isinstance(value, list):
+        # Convert any list elements
+        value = [convert_to_struct(z) for z in value]
+
+    # Done
+    return value
+
+
+
 class Struct:
     """Ordered namespace class
     """
@@ -21,6 +43,8 @@ class Struct:
         self.update(*args, **kwargs)
 
     def update(self, *args, **kwargs):
+        """Update self with new content
+        """
         d = {}
         d.update(*args, **kwargs)
         for key, value in d.items():
@@ -36,7 +60,7 @@ class Struct:
         elif hasattr({}, key):
             return False
         elif key in self._special_names:
-            return True
+            return False
         else:
             return self._valid_key_pattern.match(key)
 
@@ -82,8 +106,16 @@ class Struct:
         if not self._valid_key(key):
             raise KeyError('Invalid attribute name: {}'.format(key))
 
-        if isinstance(value, dict) and key not in self._special_names:
-            value = Struct(value)
+        value = convert_to_struct(value)
+        # if isinstance(value, dict) and key not in self._special_names:
+        #     # Convert dict to Struct
+        #     value = Struct(value)
+        # elif isinstance(value, list):
+        #     # Find elements to convert from dict to Struct
+        #     change = []
+        #     for k, v in enumerate(value):
+        #         if isinstance(v, dict):
+        #             change.append(k)
 
         self._odict[key] = value
 
