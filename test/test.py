@@ -73,6 +73,15 @@ class TestBasic(unittest.TestCase):
 
         self.assertTrue(item == info.AA)
 
+    def test_special_keys(self):
+        info = ons.Struct()
+
+        item = [1, 2, 3]
+        def fn():
+            info['_odict'] = item
+
+        self.assertRaises(KeyError, fn)
+
     def test_order(self):
         keys = ['Z', 'z', 'a', 'B00', 'B1', 'B0']
         values = list(range(len(keys)))
@@ -103,6 +112,44 @@ class TestBasic(unittest.TestCase):
         self.assertTrue(type(info.AA) == ons.Struct)
         self.assertTrue(type(info.AA.BB) == ons.Struct)
 
+    def test_nested_dict_update(self):
+        info = ons.Struct()
+
+        nuts = {'a': [1, 2], 'X': 'hello'}
+        corn = {'b': [6, 9], 'Y': 'bye', 'm': nuts}
+        yikes = {'c': [6, 9], 'Z': 'hello', 'n': corn}
+
+        info.CC = yikes
+
+        self.assertTrue(type(info.CC) == ons.Struct)
+        self.assertTrue(type(info.CC.n) == ons.Struct)
+        self.assertTrue(type(info.CC.n.m) == ons.Struct)
+
+    def test_nested_dict_define(self):
+
+        nuts = {'a': [1, 2], 'X': 'hello'}
+        corn = {'b': [6, 9], 'Y': 'bye', 'm': nuts}
+        yikes = {'c': [6, 9], 'Z': 'hello', 'n': corn}
+
+        info = ons.Struct(yikes)
+
+        # print(yikes.n.m)
+        # print(type(yikes.n.m))
+        self.assertTrue(type(info.n.m) == ons.Struct)
+
+    def test_nested_dict_list(self):
+
+        nuts = {'a': [1, 2], 'X': 'hello'}
+        corn = {'b': [6, 9], 'Y': 'bye'}
+        yikes = {'c': [6, 9], 'Z': 'hello'}
+
+        stuff = [nuts, corn, yikes]
+
+        info = ons.Struct()
+        info.S = stuff
+
+        self.assertTrue(type(info.S[0]) == ons.Struct)
+
     def test_as_dict(self):
         info = ons.Struct()
 
@@ -114,6 +161,7 @@ class TestBasic(unittest.TestCase):
 
         info = info.asdict()
 
+        self.assertTrue(type(info) == dict)
         self.assertTrue(type(info['AA']) == dict)
         self.assertTrue(type(info['AA']['BB']) == dict)
 
