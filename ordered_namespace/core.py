@@ -1,4 +1,4 @@
-from collections import OrderedDict
+from collections import OrderedDict, UserDict
 import re
 
 
@@ -12,11 +12,12 @@ def convert_to_struct(value):
 
     This function is harmless to call on arbitrary variables.
     """
-    if isinstance(value, dict):
-        # Convert dict to Struct
+    direct_converts = [dict, OrderedDict, UserDict]
+    if type(value) in direct_converts:
+        # Convert dict-like things to Struct
         value = Struct(value)
     elif isinstance(value, list):
-        # Convert any list elements
+        # Process list elements
         value = [convert_to_struct(z) for z in value]
 
     # Done
