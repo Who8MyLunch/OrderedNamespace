@@ -4,13 +4,13 @@ import re
 __all__ = ['Struct']
 
 
-def convert_to_struct(value):
+def safe_convert_to_struct(value):
     """Convert the following to Structs:
        - dicts
        - list elements that are dicts
        - ???
 
-    This function is harmless to call on arbitrary variables.
+    This function is harmless to call on un-handled variables.
     """
     direct_converts = [dict, OrderedDict, UserDict]
     if type(value) in direct_converts:
@@ -18,20 +18,19 @@ def convert_to_struct(value):
         value = Struct(value)
     elif isinstance(value, list):
         # Process list elements
-        value = [convert_to_struct(z) for z in value]
+        value = [safe_convert_to_struct(z) for z in value]
 
     # Done
     return value
 
 
 
-class Struct:
+class Struct():
     """Ordered namespace class
     """
 
     # Regular expression pattern for valid Python attributes
     # https://docs.python.org/3/reference/lexical_analysis.html#identifiers
-    # _valid_key_pattern = re.compile('[a-zA-Z_][a-zA-Z0-9_]*')
     _valid_key_pattern = re.compile('[a-zA-Z][a-zA-Z0-9_]*')
     _special_names = ['_odict']
     _repr_max_width = 13
@@ -107,18 +106,7 @@ class Struct:
         if not self._valid_key(key):
             raise KeyError('Invalid attribute name: {}'.format(key))
 
-        value = convert_to_struct(value)
-        # if isinstance(value, dict) and key not in self._special_names:
-        #     # Convert dict to Struct
-        #     value = Struct(value)
-        # elif isinstance(value, list):
-        #     # Find elements to convert from dict to Struct
-        #     change = []
-        #     for k, v in enumerate(value):
-        #         if isinstance(v, dict):
-        #             change.append(k)
-
-        self._odict[key] = value
+        self._odict[key] = safe_convert_to_struct(value)
 
     def __getattr__(self, key):
         return self._odict[key]
