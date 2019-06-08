@@ -14,5 +14,5 @@ setup(
     description='An easy-to-use Python namespace class derived from OrderedDict, including tab-completion',
     url='https://github.com/who8mylunch/OrderedNamespace',
     license='MIT',
-    keywords=['namespace', 'ordereddict', 'structure'],
+    keywords=['namespace', 'ordereddict', 'structure', 'dotdict'],
 )

@@ -1,6 +1,6 @@
 # OrderedNamespace
 
-Namespaces are a great idea and this one is mine.
+Dot-accessible attributes and namespaces are great ideas and this one is mine.
 
 What's the big deal?  Python dicts are just fine, but in the Jupyter/IPython interactive environment I hate having to deal with brackets and quotes when using tab-based auto-completion to get a quick glance at the contents of an object.
 
@@ -68,4 +68,3 @@ The follwing were extremely helpful in sorting through IPython's rich-text displ
 - http://ipython.readthedocs.io/en/stable/config/integrating.html
 - https://github.com/ipython/ipython/blob/master/IPython/lib/pretty.py
 - https://docs.python.org/3/library/functions.html#dir
-

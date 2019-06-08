@@ -1,7 +1,7 @@
 from collections import OrderedDict, UserDict
 import re
 
-
+__all__ = ['Struct']
 
 
 def convert_to_struct(value):
