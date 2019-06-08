@@ -2,6 +2,7 @@
 from __future__ import division, print_function, unicode_literals, absolute_import
 
 import unittest
+import pickle
 
 try:
     import context
@@ -165,6 +166,20 @@ class TestBasic(unittest.TestCase):
         self.assertTrue(type(info['AA']) == dict)
         self.assertTrue(type(info['AA']['BB']) == dict)
 
+
+
+class TestFancy(unittest.TestCase):
+    # def setUp(self):
+    #     pass
+
+    # def tearDown(self):
+    #     pass
+
+    def test_does_it_pickle(self):
+        info = ons.Struct()
+        info.A = [1, 2, 3, 4, 'A']
+
+        z = pickle.dumps(info)
 
 #------------------------------------------------
 
