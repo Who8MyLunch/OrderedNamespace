@@ -97,6 +97,9 @@ class Struct():
     def pop(self, key):
         return self._odict.pop(key)
 
+    def copy(self):
+        return self._odict.copy()
+
     #--------------------------------
     # Expose essential dict internal methods
     def __setattr__(self, key, value):
