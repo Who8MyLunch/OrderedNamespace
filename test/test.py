@@ -199,6 +199,13 @@ class TestFancy(unittest.TestCase):
 
         z = pickle.dumps(info)
 
+    def test_does_it_unpickle(self):
+        info = ons.Struct()
+        info.A = [1, 2, 3, 4, 'WW']
+
+        z = pickle.dumps(info)
+        anfo = pickle.loads(z)
+
 #------------------------------------------------
 
 if __name__ == '__main__':
