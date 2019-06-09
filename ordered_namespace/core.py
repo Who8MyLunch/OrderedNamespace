@@ -122,6 +122,12 @@ class Struct():
         else:
             self._odict[key] = value
 
+    def __getstate__(self):
+        return self.__dict__.copy()
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+
     def __getattr__(self, key):
         return self._odict[key]
 
