@@ -1,7 +1,7 @@
 
 from setuptools import setup, find_packages
 
-version = '2018.6.26'
+version = '2019.6.8.a'
 
 setup(
     name='ordered_namespace',
@@ -11,8 +11,8 @@ setup(
     version=version,
     author='Pierre V. Villeneuve',
     author_email='pierre.villeneuve@gmail.com',
-    description='An easy-to-use Python namespace class derived from OrderedDict, including tab-completion',
+    description='An easy-to-use Python namespace class derived from OrderedDict, includes tab-completion',
     url='https://github.com/who8mylunch/OrderedNamespace',
     license='MIT',
-    keywords=['namespace', 'ordereddict', 'structure', 'dotdict'],
+    keywords=['namespace', 'ordereddict', 'structure', 'dotdict', 'tab-completion'],
 )
