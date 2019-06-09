@@ -206,6 +206,28 @@ class TestFancy(unittest.TestCase):
         z = pickle.dumps(info)
         anfo = pickle.loads(z)
 
+    def test_pickle_unpickle_keys(self):
+        info = ons.Struct()
+        info.A = [1, 2, 3, 4, 'WW']
+
+        z = pickle.dumps(info)
+        anfo = pickle.loads(z)
+
+        for k, v in info.items():
+            self.assertTrue(k in anfo)
+
+    def test_pickle_unpickle_value(self):
+        info = ons.Struct()
+        info.A = [1, 2, 3, 4, 'WW']
+        info.SS = 4
+        info.WWW = {'d': [1,2,3]}
+
+        z = pickle.dumps(info)
+        anfo = pickle.loads(z)
+
+        for k, v in info.items():
+            self.assertTrue(v == anfo[k])
+
 #------------------------------------------------
 
 if __name__ == '__main__':
