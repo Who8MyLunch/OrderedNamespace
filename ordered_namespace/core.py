@@ -47,6 +47,7 @@ class Struct():
         """
         d = {}
         d.update(*args, **kwargs)
+
         for key, value in d.items():
             self[key] = value
 
@@ -56,18 +57,22 @@ class Struct():
         attribute names (e.g. dict class instance methods).
         """
         if not isinstance(key, str):
+            # attributes must be a string
             return False
         elif hasattr({}, key):
+            # attributes cannot be same as existing dict method
             return False
         elif key in self._special_names:
+            # attributes cannot be same as pre-identified special names
             return False
         else:
+            # attributes must match valid key pattern
             return self._valid_key_pattern.match(key)
 
     def asdict(self):
         """Return a recursive dict representation of self
         """
-        d = dict(self._odict)
+        d = self._odict
 
         for k,v in d.items():
             if isinstance(v, Struct):
@@ -76,7 +81,7 @@ class Struct():
         return d
 
     #--------------------------------
-    # Expose a few standard dict methods
+    # Expose standard dict methods
     def items(self):
         return self._odict.items()
 
