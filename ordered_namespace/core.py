@@ -4,7 +4,7 @@ import re
 __all__ = ['Struct']
 
 
-def safe_convert_to_struct(value):
+def safe_convert_to_struct(value, nested=False):
     """Convert the following to Structs:
        - dicts
        - list elements that are dicts
@@ -15,10 +15,13 @@ def safe_convert_to_struct(value):
     direct_converts = [dict, OrderedDict, UserDict]
     if type(value) in direct_converts:
         # Convert dict-like things to Struct
-        value = Struct(value)
+        value = Struct(value, nested=nested)
     elif isinstance(value, list):
         # Process list elements
-        value = [safe_convert_to_struct(z) for z in value]
+        value = [safe_convert_to_struct(z, nested=nested) for z in value]
+    elif isinstance(value, tuple):
+        # Process list elements
+        value = tupe([safe_convert_to_struct(z, nested=nested) for z in value])
 
     # Done
     return value
@@ -35,11 +38,11 @@ class Struct():
     _special_names = ['_odict']
     _repr_max_width = 13
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, nested=False, **kwargs):
         """Ordered namespace class
         """
         self.__dict__['_odict'] = OrderedDict()
-
+        self.__dict__['_nested'] = nested
         self.update(*args, **kwargs)
 
     def update(self, *args, **kwargs):
@@ -100,7 +103,7 @@ class Struct():
         """Set an item with dot-style access while testing for invalid names
         """
         if not self._valid_key(key):
-            raise AttributeError('Invalid attribute name: {}'.format(key))
+            raise AttributeError('Invalid key/attribute name: {}'.format(key))
 
         try:
             self[key] = value
@@ -109,9 +112,12 @@ class Struct():
 
     def __setitem__(self, key, value):
         if not self._valid_key(key):
-            raise KeyError('Invalid attribute name: {}'.format(key))
+            raise KeyError('Invalid key/attribute name: {}'.format(key))
 
-        self._odict[key] = safe_convert_to_struct(value)
+        if self.__dict__['_nested']:
+            self._odict[key] = safe_convert_to_struct(value, nested=True)
+        else:
+            self._odict[key] = value
 
     def __getattr__(self, key):
         return self._odict[key]
