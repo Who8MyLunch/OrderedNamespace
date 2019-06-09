@@ -117,7 +117,7 @@ class Struct():
         if not self._valid_key(key):
             raise KeyError('Invalid key/attribute name: {}'.format(key))
 
-        if self.__dict__['_nested']:
+        if self._nested:
             self._odict[key] = safe_convert_to_struct(value, nested=True)
         else:
             self._odict[key] = value
