@@ -3,6 +3,7 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 
 import unittest
 import pickle
+from collections import OrderedDict
 
 try:
     import context
@@ -101,20 +102,40 @@ class TestBasic(unittest.TestCase):
 
         self.assertTrue(keys_test_1 == keys_test_2[::-1])
 
-    def test_nested_dict_converted(self):
+    def test_nested_flag_set(self):
+        info = ons.Struct(nested=True)
+        self.assertTrue(info.__dict__['_nested'])
+
+    def test_nested_flag_not_set(self):
+        info = ons.Struct(nested=False)
+        self.assertFalse(info.__dict__['_nested'])
+
+    def test_nested_flag_default_not_set(self):
         info = ons.Struct()
+        self.assertFalse(info.__dict__['_nested'])
+
+    def test_nested_dict_converted(self):
+        info = ons.Struct(nested=True)
 
         nuts = {'a': [1, 2], 'X': 'hello'}
         corn = {'b': [6, 9], 'Y': 'bye'}
 
         info.AA = nuts
-        info.AA.BB = corn
-
         self.assertTrue(type(info.AA) == ons.Struct)
+
+        info.AA.BB = corn
         self.assertTrue(type(info.AA.BB) == ons.Struct)
 
+    def test_not_nested_dict_converted(self):
+        info = ons.Struct(nested=False)
+
+        nuts = {'a': [1, 2], 'X': 'hello'}
+
+        info.AA = nuts
+        self.assertTrue(type(info.AA) == dict)
+
     def test_nested_dict_update(self):
-        info = ons.Struct()
+        info = ons.Struct(nested=True)
 
         nuts = {'a': [1, 2], 'X': 'hello'}
         corn = {'b': [6, 9], 'Y': 'bye', 'm': nuts}
@@ -127,32 +148,29 @@ class TestBasic(unittest.TestCase):
         self.assertTrue(type(info.CC.n.m) == ons.Struct)
 
     def test_nested_dict_define(self):
-
         nuts = {'a': [1, 2], 'X': 'hello'}
         corn = {'b': [6, 9], 'Y': 'bye', 'm': nuts}
         yikes = {'c': [6, 9], 'Z': 'hello', 'n': corn}
 
-        info = ons.Struct(yikes)
+        info = ons.Struct(yikes, nested=True)
 
-        # print(yikes.n.m)
-        # print(type(yikes.n.m))
+        self.assertTrue(type(info.n) == ons.Struct)
         self.assertTrue(type(info.n.m) == ons.Struct)
 
     def test_nested_dict_list(self):
-
         nuts = {'a': [1, 2], 'X': 'hello'}
         corn = {'b': [6, 9], 'Y': 'bye'}
         yikes = {'c': [6, 9], 'Z': 'hello'}
 
         stuff = [nuts, corn, yikes]
 
-        info = ons.Struct()
+        info = ons.Struct(nested=True)
         info.S = stuff
 
         self.assertTrue(type(info.S[0]) == ons.Struct)
 
     def test_as_dict(self):
-        info = ons.Struct()
+        info = ons.Struct(nested=True)
 
         nuts = {'a': [1, 2], 'X': 'hello'}
         corn = {'b': [6, 9], 'Y': 'bye'}
@@ -162,9 +180,9 @@ class TestBasic(unittest.TestCase):
 
         info = info.asdict()
 
-        self.assertTrue(type(info) == dict)
-        self.assertTrue(type(info['AA']) == dict)
-        self.assertTrue(type(info['AA']['BB']) == dict)
+        self.assertTrue(type(info) == OrderedDict)
+        self.assertTrue(type(info['AA']) == OrderedDict)
+        self.assertTrue(type(info['AA']['BB']) == OrderedDict)
 
 
 
