@@ -134,11 +134,6 @@ class Struct():
     def __contains__(self, key):
         return self._odict.__contains__(key)
 
-    def __dir__(self):
-        """http://ipython.readthedocs.io/en/stable/config/integrating.html#tab-completion
-        """
-        return self._odict.keys()
-
     def __eq__(self, other):
         return self._odict.__eq__(other)
 
@@ -146,13 +141,16 @@ class Struct():
         return self._odict.__ne__(other)
 
     def __repr__(self):
-        return self._odict.__repr__()
+        if self:
+            return '%s(%r)' % (self.__class__.__name__, self.items())
+        else:
+            return '%s()' % (self.__class__.__name__,)
 
-    # def _ipython_key_completions_(self):
-    #     """http://ipython.readthedocs.io/en/stable/config/integrating.html#tab-completion
-    #     """
-    #     print('sdfdsfdf')
-    #     return self.__dir__()
+    def __dir__(self):
+        """http://ipython.readthedocs.io/en/stable/config/integrating.html#tab-completion
+        https://amir.rachum.com/blog/2016/10/05/python-dynamic-attributes
+        """
+        return super().__dir__() + [str(k) for k in self._odict.keys()]
 
     def _repr_pretty_(self, p, cycle):
         """Derived from IPython's dict and sequence pretty printer functions,
@@ -161,28 +159,24 @@ class Struct():
         if cycle:
             p.text('{...}')
         else:
-            keys = self.keys()
+            delim_start = self.__class__.__name__ + '{'
+            delim_end = '}'
 
-            if keys:
-                delim_start = '[{'
-                delim_end = '}]'
+            with p.group(indent=len(delim_start), open=delim_start, close=delim_end):
+                # Loop over items
+                for ix, (key, value) in p._enumerate(self.items()):
+                    p.break_()
 
-                wid_max_max = self._repr_max_width
-                wid_max = max([len(k) for k in keys])
-                wid_max = min([wid_max, wid_max_max])
-                key_template = '{{:{:d}s}}: '.format(wid_max)
+                    key_txt = '{:s}: '.format(key)
+                    L = len(key_txt)
 
-                with p.group(len(delim_start), delim_start, delim_end):
-                    # Loop over item keys
-                    for idx, key in p._enumerate(keys):
-                        if idx:
-                            p.text(',')
-                            p.breakable()
+                    p.indentation += L
+                    p.text(key_txt)
+                    p.pretty(value)
+                    p.text(',')
+                    p.indentation -= L
 
-                        p.text(key_template.format(key))
-                        p.pretty(self[key])
-            else:
-                p.text('{}')
+                p.break_()
 
 #------------------------------------------------
 
