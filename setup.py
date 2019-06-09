@@ -1,7 +1,7 @@
 
 from setuptools import setup, find_packages
 
-version = '2019.6.8.a'
+version = '2019.6.8'
 
 setup(
     name='ordered_namespace',

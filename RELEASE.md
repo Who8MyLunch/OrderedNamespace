@@ -5,16 +5,14 @@ PyPi Instructions: https://packaging.python.org/distributing/#uploading-your-pro
 Twin command-line tool for registering and uploading packages: https://github.com/pypa/twine
 
 
-Commit code edits to GitHub after making all your awesome changes.  Update version
-numbers in setup.py, version.py, etc.  Making sure to also remove 'dev' descriptor if you use one.
+Commit code edits to GitHub after making all your awesome changes.  Update version numbers in setup.py, version.py, etc.  Make sure to also remove 'dev' descriptor if you use one.
 
 ```bash
 git add <any new stuff>
 git commit -a
 ```
 
-Create source and binary distribution files.  Twine will handle registering the project if this is
-the first time.
+Create source and binary distribution files.  Twine will handle registering the project if this is the first time.
 
 
 ```bash
