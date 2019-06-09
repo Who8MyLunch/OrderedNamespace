@@ -2,6 +2,16 @@
 
 Dot-accessible attributes and namespaces are great ideas and this one is mine.
 
+## New Release - 2019.6.8
+
+This latest update includes:
+- Jupyter/iPython pretty printing works even better than before.  Everything lines up and is easier to read at a glance.
+- Tab auto-completion now shows both class methods and data attribute.  Previously it only showed data attributes.
+- Full support for pickle serialization/deserialization.
+
+
+## Description
+
 What's the big deal?  Python dicts are just fine, but in the Jupyter/IPython interactive environment I hate having to deal with brackets and quotes when using tab-based auto-completion to get a quick glance at the contents of an object.
 
 OrderedNamespace has been especially designed to have a minimal number of things that bug me.  More specifically, I wanted my namespace implementation to support the following functionality:
