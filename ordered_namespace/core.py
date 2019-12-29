@@ -4,7 +4,7 @@ import re
 __all__ = ['Struct']
 
 
-def safe_convert_to_struct(value, nested=False):
+def safe_convert_to_struct(value):  #, nested=False):
     """Convert the following to Structs:
        - dicts
        - list elements that are dicts
@@ -15,13 +15,13 @@ def safe_convert_to_struct(value, nested=False):
     direct_converts = [dict, OrderedDict, UserDict]
     if type(value) in direct_converts:
         # Convert dict-like things to Struct
-        value = Struct(value, nested=nested)
+        value = Struct(value)  #, nested=nested)
     elif isinstance(value, list):
         # Process list elements
-        value = [safe_convert_to_struct(z, nested=nested) for z in value]
+        value = [safe_convert_to_struct(z) for z in value]   # nested=nested
     elif isinstance(value, tuple):
-        # Process list elements
-        value = tupe([safe_convert_to_struct(z, nested=nested) for z in value])
+        # Process tuple elements
+        value = tuple([safe_convert_to_struct(z) for z in value])     #nested=nested
 
     # Done
     return value
@@ -38,11 +38,11 @@ class Struct():
     _special_names = ['_odict']
     _repr_max_width = 13
 
-    def __init__(self, *args, nested=False, **kwargs):
+    def __init__(self, *args, **kwargs):    # nested=False
         """Ordered namespace class
         """
         self.__dict__['_odict'] = OrderedDict()
-        self.__dict__['_nested'] = nested
+        # self.__dict__['_nested'] = nested
         self.update(*args, **kwargs)
 
     def update(self, *args, **kwargs):
@@ -117,10 +117,10 @@ class Struct():
         if not self._valid_key(key):
             raise KeyError('Invalid key/attribute name: {}'.format(key))
 
-        if self._nested:
-            self._odict[key] = safe_convert_to_struct(value, nested=True)
-        else:
-            self._odict[key] = value
+        # if self._nested:
+        self._odict[key] = safe_convert_to_struct(value)  #, nested=True)
+        # else:
+        #     self._odict[key] = value
 
     def __getstate__(self):
         return self.__dict__.copy()
@@ -165,7 +165,8 @@ class Struct():
         """http://ipython.readthedocs.io/en/stable/config/integrating.html#tab-completion
         https://amir.rachum.com/blog/2016/10/05/python-dynamic-attributes
         """
-        return super().__dir__() + [str(k) for k in self._odict.keys()]
+        # return super().__dir__() + [str(k) for k in self._odict.keys()]
+        return [str(k) for k in self._odict.keys()]
 
     def _repr_pretty_(self, p, cycle):
         """Derived from IPython's dict and sequence pretty printer functions,
